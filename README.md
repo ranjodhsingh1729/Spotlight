@@ -146,3 +146,10 @@ Pre-trained TensorFlow Lite models are stored in the `models/` directory:
 ## License
 
 This project is distributed under the MIT License. Refer to individual file headers for detailed licensing information.
+
+## References
+
+- https://research.google/blog/background-features-in-google-meet-powered-by-web-ml/
+- https://dl.acm.org/doi/10.1145/3084363.3085022
+- https://yehar.com/blog/?p=1495
+- https://docs.kernel.org/userspace-api/media/index.html
