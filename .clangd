@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - -I./src
+    - -I./3rdparty/tensorflow
+    - -I/opt/intel/oneapi/compiler/2025.3/include
