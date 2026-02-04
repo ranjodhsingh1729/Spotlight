@@ -2,6 +2,8 @@
 
 **Spotlight** is an experimental project designed to bring functionality similar to Microsoft Windows Studio Effects to Linux desktop environments. These effects are typically restricted to AI-capable hardware on Windows systems and rely heavily on dedicated accelerators. Replicating comparable performance and quality without specialized hardware is challenging, but this project explores achieving efficient real-time performance using general-purpose CPU resources on Linux. It is my hope that in time, this project can support multiple hardware acceleration backends too.
 
+SEE TODO.md for current development goals.
+
 ## Project Goals
 
 ### Functional Features
