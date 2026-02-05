@@ -21,7 +21,10 @@ class LaplacianFilter
 {
  public:
   LaplacianFilter(
-    const int width, const int height, const int channels
+    const int /* radius */,
+    const int width,
+    const int height,
+    const int channels
   )
     : width(width), height(height), channels(channels)
   {

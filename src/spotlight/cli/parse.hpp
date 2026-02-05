@@ -13,6 +13,8 @@
 
 #include <cstdlib>
 #include <getopt.h>
+#include <string_view>
+
 #include <spotlight/config/config.hpp>
 #include <spotlight/config/defaults.hpp>
 #include <spotlight/utils/error_utils.hpp>
@@ -46,6 +48,7 @@ inline spotlight::PipelineConfig parse_args(int argc, char** argv)
   cfg.out_fourcc = OUT_FOURCC;
 
   cfg.bg_img_path = BG_IMG_PATH;
+  cfg.pipeline_mode = PIPELINE_MODE;
 
   static struct option long_opts[] = {
     {"threads", required_argument, nullptr, 'j'},
@@ -63,6 +66,7 @@ inline spotlight::PipelineConfig parse_args(int argc, char** argv)
     {"output-fourcc", required_argument, nullptr, 10},
 
     {"background", required_argument, nullptr, 'b'},
+    {"mode", required_argument, nullptr, 'm'},
 
     {nullptr, 0, nullptr, 0}
   };
@@ -70,7 +74,9 @@ inline spotlight::PipelineConfig parse_args(int argc, char** argv)
   int opt;
   int long_index = 0;
   while (
-    (opt = getopt_long(argc, argv, "j:i:o:", long_opts, &long_index)) != -1
+    (opt = getopt_long(
+        argc, argv, "j:i:o:b:m:", long_opts, &long_index)
+    ) != -1
   )
   {
     switch (opt)
@@ -110,6 +116,24 @@ inline spotlight::PipelineConfig parse_args(int argc, char** argv)
         break;
     case 'b':
         cfg.bg_img_path = optarg;
+        break;
+    case 'm':
+        if (std::string_view(optarg) == "blur")
+        {
+            cfg.pipeline_mode = PipelineMode::BLUR;
+        }
+        else if (std::string_view(optarg) == "image")
+        {
+            cfg.pipeline_mode = PipelineMode::IMAGE;
+        }
+        else if (std::string_view(optarg) == "video")
+        {
+            cfg.pipeline_mode = PipelineMode::VIDEO;
+        }
+        else
+        {
+            throw_err("Invalid PipelineMode!!!");
+        }
         break;
     default:
         throw_err("Invalid command line argument");

@@ -40,6 +40,12 @@ struct DeviceConfig
   }
 };
 
+enum class PipelineMode {
+  BLUR,
+  IMAGE,
+  VIDEO, // TODO: SUPPORT THIS!
+};
+
 struct PipelineConfig
 {
   int num_threads;
@@ -58,6 +64,7 @@ struct PipelineConfig
   std::string out_path;
   std::string bg_img_path;
 
+  PipelineMode pipeline_mode;
 
   int InpPixels() const { return inp_width * inp_height; }
   int OutPixels() const { return out_width * out_height; }

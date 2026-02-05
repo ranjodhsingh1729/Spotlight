@@ -12,7 +12,6 @@
 #define PIPELINE_HPP
 
 #include <cstdint>
-
 #include <spotlight/config/config.hpp>
 #include <spotlight/config/defaults.hpp>
 #include <spotlight/models/segm/segm.hpp>
@@ -39,6 +38,7 @@ class Pipeline
         segm.ModelWidth(), segm.ModelHeight(), 1
       ),
       edge_filter(
+        EDGE_FILTER_RADIUS,
         segm.ModelWidth(), segm.ModelHeight(), 1
       ),
       blur_filter(
@@ -52,26 +52,37 @@ class Pipeline
     vec_out_segm.resize(1 * segm.ModelPixels());
     vec_mask_s.resize(1 * segm.ModelPixels());
     vec_mask_l.resize(1 * cfg.OutPixels());
-    vec_blur_s.resize(3 * segm.ModelPixels());
-    vec_blur_l.resize(3 * cfg.OutPixels());
-
     inp_segm = vec_inp_segm.data();
     out_segm = vec_out_segm.data();
     mask_s = vec_mask_s.data();
     mask_l = vec_mask_l.data();
-    blur_s = vec_blur_s.data();
-    blur_l = vec_blur_l.data();
 
-    // vec_bg_img.resize(3 * cfg.OutPixels());
-    // bg_img = vec_bg_img.data();
-    // load_PNG(
-    //   cfg.bg_img_path,
-    //   bg_img, 3 * cfg.OutPixels() * sizeof(float),
-    //   cfg.out_width, cfg.out_height, 3
-    // );
+    switch (cfg.pipeline_mode)
+    {
+      case PipelineMode::BLUR:
+        vec_blur_s.resize(3 * segm.ModelPixels());
+        vec_blur_l.resize(3 * cfg.OutPixels());
+        blur_s = vec_blur_s.data();
+        blur_l = vec_blur_l.data();
+        break;
+      case PipelineMode::IMAGE:
+        vec_bg_img.resize(3 * cfg.OutPixels());
+        bg_img = vec_bg_img.data();
+        load_PNG(
+          cfg.bg_img_path,
+          bg_img, 3 * cfg.OutPixels() * sizeof(float),
+          cfg.out_width, cfg.out_height, 3
+        );
+        break;
+      case PipelineMode::VIDEO:
+        throw_err("PipelineMode unsupported yet!!!");
+        break;
+      default:
+        throw_err("Invalid PipelineMode!!!");
+    }
   }
 
-  // TODO: HANDLE INP_SIZE != OUT_SIZE
+
   void invoke(const uint8_t* inp_u, uint8_t* out_u)
   {
     spotlight::resize_bilinear(
@@ -90,23 +101,38 @@ class Pipeline
     );
 
     mask_filter.invoke(out_segm, mask_s);
-    blur_filter.invoke(inp_segm, blur_s, out_segm);
-
-    spotlight::resize_bilinear(
-      blur_s, blur_l,
-      segm.ModelWidth(), segm.ModelHeight(),
-      cfg.out_width, cfg.out_height, 3
-    );
     spotlight::resize_bilinear(
       mask_s, mask_l,
       segm.ModelWidth(), segm.ModelHeight(),
       cfg.out_width, cfg.out_height, 1
     );
 
-    spotlight::alpha_blend(
-      inp_u, blur_l, out_u, mask_l,
-      cfg.out_width, cfg.out_height, 3
-    );
+    switch (cfg.pipeline_mode)
+    {
+      case PipelineMode::BLUR:
+        blur_filter.invoke(inp_segm, blur_s, out_segm);
+        spotlight::resize_bilinear(
+          blur_s, blur_l,
+          segm.ModelWidth(), segm.ModelHeight(),
+          cfg.out_width, cfg.out_height, 3
+        );
+        spotlight::alpha_blend(
+          inp_u, blur_l, out_u, mask_l,
+          cfg.out_width, cfg.out_height, 3
+        );
+        break;
+      case PipelineMode::IMAGE:
+        spotlight::alpha_blend(
+          inp_u, bg_img, out_u, mask_l,
+          cfg.out_width, cfg.out_height, 3
+        );
+        break;
+      case PipelineMode::VIDEO:
+        throw_err("PipelineMode unsupported yet!!!");
+        break;
+      default:
+        throw_err("Invalid PipelineMode!!!");
+    }
   }
 
 

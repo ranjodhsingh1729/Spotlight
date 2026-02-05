@@ -12,6 +12,7 @@
 #define DEFAULTS_HPP
 
 #include <linux/videodev2.h>
+#include <spotlight/config/config.hpp>
 
 
 // Configurable 
@@ -30,6 +31,8 @@
 #define OUT_FPS                  30.0
 
 #define BG_IMG_PATH              "assets/background.png"
+
+#define PIPELINE_MODE            PipelineMode::BLUR
 
 
 // Unconfigurable (For Now)
