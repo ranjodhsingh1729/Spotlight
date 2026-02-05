@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   try
   {
     using clock = std::chrono::steady_clock;
-    for (int i = 0; i < 1000; i++)
+    for (;;)
     {
       auto start = clock::now();
       cam.invoke(inp_u);
