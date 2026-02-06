@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 #include <spotlight/utils/image_utils.hpp>
 #include <spotlight/filters/box_filter.hpp>
@@ -47,7 +48,9 @@ class GuidedFilter
   void invoke(
     const iT* I,
     const gT* P,
-    oT* Q
+    oT* Q,
+    float clamp_lo = 0.0f,
+    float clamp_hi = 1.0f
   )
   {
     box_filter.invoke(I, meanI.data());
@@ -69,12 +72,16 @@ class GuidedFilter
       B[i] = meanP[i] - A[i] * meanI[i];
     }
 
-    box_filter.invoke(A.data(), meanA.data());
-    box_filter.invoke(B.data(), meanB.data());
+    box_filter.invoke<float, float>(A.data(), meanA.data());
+    box_filter.invoke<float, float>(B.data(), meanB.data());
 
     // TODO: Does this need a clamp?
     for (int i = 0; i < height * width * channels; i++)
-      Q[i] = (oT)(meanA[i] * I[i] + meanB[i]);
+    {
+      Q[i] = (oT)std::clamp(
+        meanA[i] * I[i] + meanB[i], clamp_lo, clamp_hi
+      );
+    }
   }
 
 

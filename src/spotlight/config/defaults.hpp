@@ -48,7 +48,7 @@
 #define FRAME_PAD_RIGHT          0.50
 
 #define SEGM_MODEL_PATH          "models/segm/segm_lite_v681.tflite"
-#define MASK_FILTER_RADIUS       3
+#define MASK_FILTER_RADIUS       2
 #define EDGE_FILTER_RADIUS       3
 #define BLUR_FILTER_RADIUS       3
 #define BLUR_FILTER_COMPONENTS   2
