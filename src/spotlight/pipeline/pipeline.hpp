@@ -32,7 +32,7 @@ class Pipeline
  public:
   Pipeline(const PipelineConfig& cfg)
     : cfg(cfg),
-      segm(SEGM_MODEL_PATH, cfg.num_threads),
+      segm(SEGM_MODEL, cfg.n_threads),
       mask_filter(
         MASK_FILTER_RADIUS,
         segm.ModelWidth(), segm.ModelHeight(), 1
@@ -57,7 +57,7 @@ class Pipeline
     mask_s = vec_mask_s.data();
     mask_l = vec_mask_l.data();
 
-    switch (cfg.pipeline_mode)
+    switch (cfg.mode)
     {
       case PipelineMode::BLUR:
         vec_blur_s.resize(3 * segm.ModelPixels());
@@ -69,9 +69,9 @@ class Pipeline
         vec_bg_img.resize(3 * cfg.OutPixels());
         bg_img = vec_bg_img.data();
         load_PNG(
-          cfg.bg_img_path,
+          cfg.bg_img,
           bg_img, 3 * cfg.OutPixels() * sizeof(float),
-          cfg.out_width, cfg.out_height, 3
+          cfg.out_w, cfg.out_h, 3
         );
         break;
       case PipelineMode::VIDEO:
@@ -87,7 +87,7 @@ class Pipeline
   {
     spotlight::resize_bilinear(
       inp_u, inp_segm,
-      cfg.inp_width, cfg.inp_height,
+      cfg.in_w, cfg.in_h,
       segm.ModelWidth(), segm.ModelHeight(), 3
     );
     spotlight::scale(
@@ -104,27 +104,27 @@ class Pipeline
     spotlight::resize_bilinear(
       mask_s, mask_l,
       segm.ModelWidth(), segm.ModelHeight(),
-      cfg.out_width, cfg.out_height, 1
+      cfg.out_w, cfg.out_h, 1
     );
 
-    switch (cfg.pipeline_mode)
+    switch (cfg.mode)
     {
       case PipelineMode::BLUR:
         blur_filter.invoke(inp_segm, blur_s, out_segm);
         spotlight::resize_bilinear(
           blur_s, blur_l,
           segm.ModelWidth(), segm.ModelHeight(),
-          cfg.out_width, cfg.out_height, 3
+          cfg.out_w, cfg.out_h, 3
         );
         spotlight::alpha_blend(
           inp_u, blur_l, out_u, mask_l,
-          cfg.out_width, cfg.out_height, 3
+          cfg.out_w, cfg.out_h, 3
         );
         break;
       case PipelineMode::IMAGE:
         spotlight::alpha_blend(
           inp_u, bg_img, out_u, mask_l,
-          cfg.out_width, cfg.out_height, 3
+          cfg.out_w, cfg.out_h, 3
         );
         break;
       case PipelineMode::VIDEO:

@@ -23,7 +23,6 @@
 
 ## PLAN
 
-- [ ] Fix Halo in relatively dark backgrounds.
 - [ ] Polish the CPU version the best you can.
 - [ ] Implement CONF file and DBUS Interface.
 - [ ] Write the gnome extension and release.

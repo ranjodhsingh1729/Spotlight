@@ -8,6 +8,7 @@
  * This file is licensed under the MIT License.
  * You may obtain a copy of the License at https://opensource.org/license/MIT.
  */
+#include "spotlight/config/file.hpp"
 #include <chrono>
 #include <iostream>
 #include <getopt.h>
@@ -22,13 +23,19 @@
 
 int main(int argc, char **argv)
 {
-  // Get Configuration from CLI
-  spotlight::PipelineConfig cfg = spotlight::parse_args(argc, argv);
+  // Default Configurations
+  spotlight::PipelineConfig cfg;
+
+  // Conf File
+  spotlight::parse_config_file(CONF_FILE, cfg);
   
+  // Get Configuration from CLI
+  spotlight::parse_args(argc, argv, cfg);
+
   // Initialize Pipeline
   spotlight::Pipeline pipeline(cfg);
-  spotlight::V4L2Camera cam(cfg.inp_path, cfg.InpConfig());
-  spotlight::V4L2VirtualCamera vcam(cfg.out_path, cfg.OutConfig());
+  spotlight::V4L2Camera cam(cfg.in_dev, cfg.InpConfig());
+  spotlight::V4L2VirtualCamera vcam(cfg.out_dev, cfg.OutConfig());
 
   // Allocate Required Buffers
   // TODO: Use you own allocator

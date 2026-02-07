@@ -16,46 +16,47 @@
 
 
 // Configurable 
-#define NUM_THREADS              1
+#define MODE                     PipelineMode::BLUR
+#define N_THREADS                1
 
-#define INP_PATH                 "/dev/video0"
-#define INP_FOURCC               V4L2_PIX_FMT_MJPEG
-#define INP_WIDTH                1280
-#define INP_HEIGHT               720
-#define INP_FPS                  30.0
+#define IN_DEV                   "/dev/video0"
+#define IN_FMT                   V4L2_PIX_FMT_MJPEG
+#define IN_W                     1280
+#define IN_H                     720
+#define IN_FPS                   30.0
 
-#define OUT_PATH                 "/dev/video10"
-#define OUT_FOURCC               V4L2_PIX_FMT_MJPEG
-#define OUT_WIDTH                1280
-#define OUT_HEIGHT               720
+#define OUT_DEV                  "/dev/video10"
+#define OUT_FMT                  V4L2_PIX_FMT_MJPEG
+#define OUT_W                    1280
+#define OUT_H                    720
 #define OUT_FPS                  30.0
 
-#define BG_IMG_PATH              "assets/background.png"
+#define BG_IMG                   "assets/background.png"
 
-#define PIPELINE_MODE            PipelineMode::BLUR
-
-
-// Unconfigurable (For Now)
-#define FACE_MODEL_PATH          "models/face/face_smpl_320p.tflite"
-#define FACE_TOPK                10
-#define SCORE_THRESHOLD          0.8
-#define IOU_THRESHOLD            0.2
-#define TEMPORAL_ALPHA           0.9
-#define JERK_THRESHOLD           0.3
-#define FRAME_PAD_TOP            0.50
-#define FRAME_PAD_BOTTOM         0.25
-#define FRAME_PAD_LEFT           0.50
-#define FRAME_PAD_RIGHT          0.50
-
-#define SEGM_MODEL_PATH          "models/segm/segm_lite_v681.tflite"
 #define MASK_FILTER_RADIUS       2
 #define EDGE_FILTER_RADIUS       3
 #define BLUR_FILTER_RADIUS       3
 #define BLUR_FILTER_COMPONENTS   2
 #define BLUR_FILTER_TRANSITION   0.4
 
-#define MJPEG_QUALITY            95
-#define MAX_BG_IMG_SIZE          3 * 15360 * 8640
+#define MJPEG_Q                  95
+
+
+// Unconfigurable (For Now)
+#define CONF_FILE                "/etc/spotlight.conf"
+
+#define FACE_MODEL              "models/face/face_smpl_320p.tflite"
+#define FACE_TOPK                10
+#define SCORE_THRESHOLD          0.8
+#define IOU_THRESHOLD            0.2
+#define TEMPORAL_ALPHA           0.9
+#define JERK_THRESHOLD           0.3
+#define FRAME_PAD_U              0.50
+#define FRAME_PAD_D              0.25
+#define FRAME_PAD_L              0.50
+#define FRAME_PAD_R              0.50
+
+#define SEGM_MODEL               "models/segm/segm_lite_v681.tflite"
 
 
 #endif // DEFAULTS_HPP
