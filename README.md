@@ -31,7 +31,7 @@ The project integrates several third-party libraries and Linux multimedia compon
   Provides Virtual Camera devices where Spotlight can write its output.
 
 * **TensorFlow Lite**
-  Lightweight inference runtime used for face detection and selfie segmentation. The build process is automated through `3rdparty/build_tflite.sh`.
+  Lightweight inference runtime used for face detection and selfie segmentation. See `3rdparty/build_tflite.sh`.
 
 * **TurboJPEG**
   High-performance JPEG encoding and decoding for MJPEG-based streams in order to support `V4L2_PIX_FMT_MJPEG`.
@@ -44,7 +44,6 @@ The project integrates several third-party libraries and Linux multimedia compon
 
 * **getopt_long**
   Command-line argument parsing.
-
 
 
 ## Build Instructions
@@ -131,21 +130,9 @@ Run Spotlight using `/dev/video0` as input and `/dev/video10` as output with bac
 ```
 
 
-
-## Machine Learning Models
-
-Pre-trained TensorFlow Lite models are stored in the `models/` directory:
-
-* Face Detection
-  `models/face/face_smpl_320p.tflite`
-
-* Selfie Segmentation
-  `models/segm/segm_lite_v681.tflite`
-
-
 ## License
 
-This project is distributed under the MIT License. Refer to individual file headers for detailed licensing information.
+This project is distributed under the MIT License. See LICENSE.
 
 ## References
 
